@@ -1,16 +1,23 @@
-/*******************************************************************
-* simulation.cpp
-* Programming Assignment 1 : Sensor Simulation
-* Author: Samuel Sikes
-* Date: June 2016
-* This program is entirely my own work
-*******************************************************************/
+//====================================================================
+// simulation.cpp
+// Programming Assignment 1 : Sensor Simulation
+// Author: Samuel Sikes
+// Date: June 2016
+// This program is entirely my own work
+//====================================================================
 #include "simulation.h"
-/********************************/
-/********************************/
-/*********PRIVATE METHODS********/
-/********************************/
-/***********************************/
+
+//---------------------------------
+//---------------------------------
+//--------PRIVATE METHODS----------
+//---------------------------------
+//---------------------------------
+
+//---------------------------------
+//function: simulationDescription()
+//Displays a description of the
+//program.
+//---------------------------------
 void simulation::simulationDescription(){
 
     for (int i = 0; i < 60; i++)
@@ -27,7 +34,12 @@ void simulation::simulationDescription(){
         std::cout << "=";
     std::cout << "\n\n";
 };
-/***********************************/
+
+//---------------------------------
+//function: getFile()
+//Prompts user to enter the name
+//of the file that they want parsed.
+//---------------------------------
 void simulation::getFile(){
 
     char fileName[64];
@@ -35,17 +47,32 @@ void simulation::getFile(){
     std::cin >> fileName;
     dataParserPtr = new EnviroSimDataParser(fileName);
 };
-/***********************************/
+
+//---------------------------------
+//function: buildDevices()
+//Gets the number of sensor and
+//display devices to create and
+//passes those counts to the create
+//functions for both displays and
+//sensors. Then, deletes instance of
+//data parser.
+//---------------------------------
 void simulation::buildDevices(){
 
     int sensorCount = dataParserPtr->getSensorCount();
     int displayCount = dataParserPtr->getDisplayCount();
-    createDisplays(displayCount);
-    createSensors(sensorCount);
+    this->createDisplays(displayCount);
+    this->createSensors(sensorCount);
 
     delete dataParserPtr; dataParserPtr = NULL;
 };
-/***********************************/
+
+//---------------------------------
+//function: createDisplays()
+//Creates the appropriate number of
+//displays and passes each display
+//to display's getDisplay() method
+//---------------------------------
 void simulation::createDisplays(int& count){
 
     for(int i=0; i < count; i++){
@@ -55,7 +82,13 @@ void simulation::createDisplays(int& count){
         displayPtr->getDisplay(displayNodePtr);
     }
 };
-/***********************************/
+
+//---------------------------------
+//function: createSensors()
+//Creates the appropriate number of
+//sensors and passes each sensor
+//to sensor's getSensor() method
+//---------------------------------
 void simulation::createSensors(int& count){
 
     for(int i=0; i < count; i++){
@@ -67,7 +100,15 @@ void simulation::createSensors(int& count){
         sensorPtr->getSensor(sensorNodePtr);
     }
 };
-/***********************************/
+
+//---------------------------------
+//function: attachDevices()
+//Attaches all sensors and display
+//devices to sensor mount. Then,
+//calls sensor mount funciton to
+//link all sensors to the appropriate
+//display devices.
+//---------------------------------
 void simulation::attachDevices(){
 
     sensorMountPtr->attachDisplays(displayPtr->relayDisplayData());
@@ -75,31 +116,51 @@ void simulation::attachDevices(){
     if(!sensorMountPtr->linkSensorsToDisplays())
         std::cout << "\n" << "Linking Sensors To Displays FAILED" << "\n";
 };
-/********************************/
-/********************************/
-/*********PUBLIC METHODS*********/
-/********************************/
-/***********************************/
+
+//---------------------------------
+//---------------------------------
+//--------PUBLIC METHODS-----------
+//---------------------------------
+//---------------------------------
+
+//---------------------------------
+//function: simulation()
+//dynamically creates instances of
+//sensor, display, and sensor mount
+//---------------------------------
 simulation::simulation(){
 
     sensorPtr = new sensor;
     displayPtr = new display;
     sensorMountPtr = new sensorMount;
 };
-/***********************************/
+
+//---------------------------------
+//function: ~simulation()
+//deallocates memory for: display,
+//sensor, and sensor mount
+//sets all private pointers to NULL
+//---------------------------------
 simulation::~simulation(){
 
     delete sensorPtr; sensorPtr = NULL;
     delete displayPtr; displayPtr = NULL;
     delete sensorMountPtr; sensorMountPtr = NULL;
 };
-/***********************************/
+
+//---------------------------------
+//function: runSimulation()
+//calls appropriate simulation
+//methods. Then, generates sensor
+//data and displays it every 5
+//seconds
+//---------------------------------
 void simulation::runSimulation() {
 
-    simulationDescription();
-    getFile();
-    buildDevices();
-    attachDevices();
+    this->simulationDescription();
+    this->getFile();
+    this->buildDevices();
+    this->attachDevices();
     sensorMountPtr->displayConnectedDevices();
     /*- - - - - - - - - - - - -*/
     std::cout << "\n\n\n" << "Beginning simulation run..." << "\n\n";
