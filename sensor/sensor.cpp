@@ -22,7 +22,6 @@
 //---------------------------------
 void sensor::generateSensorData(unsigned long& vSize) {
     for(unsigned long i = 0; i < vSize; i++) {
-        srand((unsigned int) (time(NULL)));
         vPtr->at(i)->sensorData = vPtr->at(i)->minVal + (rand() %
                 (int) (vPtr->at(i)->maxVal - vPtr->at(i)->minVal + 1));
     }
