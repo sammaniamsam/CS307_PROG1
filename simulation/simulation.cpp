@@ -75,6 +75,8 @@ void simulation::buildDevices(){
 //---------------------------------
 void simulation::createDisplays(int& count){
 
+    //will use simpleDisplayFactory to create displays
+    
     for(int i=0; i < count; i++){
         displayNode* displayNodePtr = new displayNode;
         if(!dataParserPtr->getDisplayData(displayNodePtr->type,displayNodePtr->IDs,&displayNodePtr->IDCount))
