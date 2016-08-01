@@ -59,8 +59,12 @@ void simulation::getFile(){
 //---------------------------------
 void simulation::buildDevices(){
 
+    //use new data parser to get display counts (air, water, earth)
     int sensorCount = dataParserPtr->getSensorCount();
+
+    //use new data parser to get display count
     int displayCount = dataParserPtr->getDisplayCount();
+
     this->createDisplays(displayCount);
     this->createSensors(sensorCount);
 
@@ -75,13 +79,22 @@ void simulation::buildDevices(){
 //---------------------------------
 void simulation::createDisplays(int& count){
 
-    //will use simpleDisplayFactory to create displays
-    
+    //create singleton
+    simpleDisplayFactory* SDFptr = simpleDisplayFactory::getInstance();
+
     for(int i=0; i < count; i++){
+        //create display class instance
+        display* displayPtr = SDFptr->createDisplayInstance();
+        //create display node instance
         displayNode* displayNodePtr = new displayNode;
+        //print message if parsing fails
         if(!dataParserPtr->getDisplayData(displayNodePtr->type,displayNodePtr->IDs,&displayNodePtr->IDCount))
             cout << "\n" << "Parsing for Display " << i << " failed" << "\n";
-        displayPtr->getDisplay(displayNodePtr);
+        else {
+            displayPtr->getDisplay(displayNodePtr);
+            //link display node to display class
+            //link display class to sensor mount
+        }
     }
 };
 

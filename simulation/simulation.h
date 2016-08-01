@@ -10,6 +10,7 @@
 //---------------------------------
 #include "../sensor/sensor.h"
 #include "../display/display.h"
+#include "../simpleDisplayFactory/simpleDisplayFactory.h"
 #include "../sensor_mount/sensorMount.h"
 #include "../data_parser/EnviroSimDataParser.h"
 //---------------------------------

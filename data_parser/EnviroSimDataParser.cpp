@@ -4,7 +4,7 @@
 //          utility class.
 // Author: Dr. Rick Coleman
 //=======================================================
-//#define _CRT_SECURE_NO_WARNINGS // Shut up MS, about strcpy(), etc.
+#define _CRT_SECURE_NO_WARNINGS // Shut up MS, about strcpy(), etc.
 
 #include "EnviroSimDataParser.h"
 #include <cctype>
@@ -13,17 +13,48 @@ using namespace std;
 //------------------------------------------------
 // Default constructor
 //------------------------------------------------
-EnviroSimDataParser::EnviroSimDataParser(char *fileName)
+EnviroSimDataParser::EnviroSimDataParser()
+{
+    m_iNumEarthSensors = 0; // Number of earth sensors in the file
+    m_iNumAirSensors = 0; // Number of air sensors in the file
+    m_iNumWaterSensors = 0; // Number of Water sensors in the file
+    m_iNumDisplays = 0; // Number of display devices in the file
+    m_iNextEarthSensor = 0; // Next earth sensor number to read
+    m_iNextAirSensor = 0; // Next air sensor number to read
+    m_iNextWaterSensor = 0; // Next water sensor number to read
+    m_iNextDisplay = 0; // Next display number to read
+}
+
+//------------------------------------------------
+// Destructor
+//------------------------------------------------
+EnviroSimDataParser::~EnviroSimDataParser()
+{
+}
+
+//------------------------------------------------
+// Get the singleton instance
+//------------------------------------------------
+EnviroSimDataParser *EnviroSimDataParser::getInstance()
+{
+    static EnviroSimDataParser *instance = NULL;
+    if(instance == NULL)
+    {
+        instance = new EnviroSimDataParser();
+    }
+    return instance;
+}
+
+//------------------------------------------------
+// Initialize the data parser with the file name.
+//------------------------------------------------
+void EnviroSimDataParser::initDataParser(char *fileName)
 {
     char line[128];
 
     strcpy(m_sFileName, fileName);
     inFile = new ifstream();
     inFile->open(m_sFileName, fstream::in); // Open the data file
-    m_iNumSensors = 0;  // Number of sensors in the file
-    m_iNumDisplays = 0; // Number of display devices in the file
-    m_iNextSensor = 0;  // Next sensor number to read
-    m_iNextDisplay = 0; // Next display number to read
 
     if(inFile->is_open())
     {
@@ -31,7 +62,17 @@ EnviroSimDataParser::EnviroSimDataParser(char *fileName)
         while(getNextLine(line, 127))
         {
             if(strcmp(line, "<SENSOR>") == 0)
-                m_iNumSensors++;
+            {
+                // Get its type
+                getNextLine(line, 127);	// this should be the <TYPE> tag
+                getNextLine(line, 127);	// this should be the type
+                if(strcmp(line, "Earth") == 0)
+                    m_iNumEarthSensors++;
+                else if(strcmp(line, "Air") == 0)
+                    m_iNumAirSensors++;
+                else if(strcmp(line, "Water") == 0)
+                    m_iNumWaterSensors++;
+            }
             if(strcmp(line, "<DISPLAY_DEVICE>") == 0)
                 m_iNumDisplays++;
         }
@@ -43,19 +84,15 @@ EnviroSimDataParser::EnviroSimDataParser(char *fileName)
         exit(0);
     }
 }
-//------------------------------------------------
-// Destructor
-//------------------------------------------------
-EnviroSimDataParser::~EnviroSimDataParser()
-{
-}
 
 //------------------------------------------------
 // Return number of sensors in the data file.
 //------------------------------------------------
-int EnviroSimDataParser::getSensorCount()
+void EnviroSimDataParser::getSensorCounts(int *earth, int *air, int *water)
 {
-    return m_iNumSensors;
+    *earth = m_iNumEarthSensors;
+    *air = m_iNumAirSensors;
+    *water = m_iNumWaterSensors;
 }
 
 //------------------------------------------------
@@ -69,7 +106,7 @@ int EnviroSimDataParser::getDisplayCount()
 //------------------------------------------------------------------
 // Gets all data on one sensor
 // Args:
-//		type - pointer to a char array to hold sensor type string
+//		type - pointer to a char array holding the sensor type string
 //		material - pointer to a char array to hold material string
 //		ID - pointer to int variable to hold sensor ID
 //		units - pointer to char array to hold units string
@@ -82,9 +119,14 @@ bool EnviroSimDataParser::getSensorData(char *type, char *material, int *ID,
 {
     int sNum = 0;
     char line[128];
+    bool getInfo = false;
+    bool done = false;
 
     // See if we have read all sensors
-    if(m_iNextSensor >= m_iNumSensors) return false;
+    if((m_iNextEarthSensor >= m_iNumEarthSensors) &&
+       (m_iNextAirSensor >= m_iNumAirSensors) &&
+       (m_iNextWaterSensor >= m_iNumWaterSensors))
+        return false;
 
     // Reopen the file
     inFile = new ifstream();
@@ -96,82 +138,116 @@ bool EnviroSimDataParser::getSensorData(char *type, char *material, int *ID,
         {
             if(strcmp(line, "<SENSOR>") == 0) // Got one
             {
-                if(sNum == m_iNextSensor)
+                // Check the type
+                getNextLine(line, 127);	// This will be the <TYPE> tag
+                getNextLine(line, 127);	// This will be the type
+                // Is this one of the type we are looking for?
+                if (strcmp(type, line) == 0)
                 {
-                    // Get data on this one
-                    while(getNextLine(line, 127))
+                    // If we are looking for Earth check the count
+                    if(strcmp(type, "Earth") == 0)
                     {
-                        // Get the type
-                        if(strcmp(line, "<TYPE>") == 0)
+                        // Is this the one we want?
+                        if(sNum == m_iNextEarthSensor)
                         {
-                            if(getNextLine(line, 127))
+                            getInfo = true;
+                            m_iNextEarthSensor++; // Set for next time
+                        }
+                        else
+                            sNum++;
+                    }
+                        // If we are looking for Air check the count
+                    else if(strcmp(type, "Air") == 0)
+                    {
+                        // Is this the one we want?
+                        if(sNum == m_iNextAirSensor)
+                        {
+                            getInfo = true;
+                            m_iNextAirSensor++; // Set for next time
+                        }
+                        else
+                            sNum++;
+                    }
+                        // If we are looking for Water check the count
+                    else if(strcmp(type, "Water") == 0)
+                    {
+                        // Is this the one we want?
+                        if(sNum == m_iNextWaterSensor)
+                        {
+                            getInfo = true;
+                            m_iNextWaterSensor++; // Set for next time
+                        }
+                        else
+                            sNum++;
+                    }
+                    // Get the rest of the data if flag says to
+                    if(getInfo)
+                    {
+                        while(getNextLine(line, 127))
+                        {
+                            if(strcmp(line, "<MATERIAL>") == 0)
                             {
-                                strcpy(type, line); // Set the type
+                                if(getNextLine(line, 127))
+                                {
+                                    strcpy(material, line); // Set the material
+                                }
+                                else
+                                    return false; // Oops!
                             }
-                            else
-                                return false; // Oops!
-                        }
-                        else if(strcmp(line, "<MATERIAL>") == 0)
-                        {
-                            if(getNextLine(line, 127))
+                            else if(strcmp(line, "<ID>") == 0)
                             {
-                                strcpy(material, line); // Set the material
+                                if(getNextLine(line, 127))
+                                {
+                                    *ID = atoi(line); // Set the ID
+                                }
+                                else
+                                    return false; // Oops!
                             }
-                            else
-                                return false; // Oops!
-                        }
-                        else if(strcmp(line, "<ID>") == 0)
-                        {
-                            if(getNextLine(line, 127))
+                            else if(strcmp(line, "<UNITS>") == 0)
                             {
-                                *ID = atoi(line); // Set the ID
+                                if(getNextLine(line, 127))
+                                {
+                                    strcpy(units, line); // Set the units
+                                }
+                                else
+                                    return false; // Oops!
                             }
-                            else
-                                return false; // Oops!
-                        }
-                        else if(strcmp(line, "<UNITS>") == 0)
-                        {
-                            if(getNextLine(line, 127))
+                            else if(strcmp(line, "<MINIMUM_VALUE>") == 0)
                             {
-                                strcpy(units, line); // Set the units
+                                if(getNextLine(line, 127))
+                                {
+                                    *minVal = atof(line); // Set the minimum value
+                                }
+                                else
+                                    return false; // Oops!
                             }
-                            else
-                                return false; // Oops!
-                        }
-                        else if(strcmp(line, "<MINIMUM_VALUE>") == 0)
-                        {
-                            if(getNextLine(line, 127))
+                            else if(strcmp(line, "<MAXIMUM_VALUE>") == 0)
                             {
-                                *minVal = atof(line); // Set the minimum value
+                                if(getNextLine(line, 127))
+                                {
+                                    *maxVal = atof(line); // Set the minimum value
+                                }
+                                else
+                                    return false; // Oops!
                             }
-                            else
-                                return false; // Oops!
-                        }
-                        else if(strcmp(line, "<MAXIMUM_VALUE>") == 0)
-                        {
-                            if(getNextLine(line, 127))
+                            else if(strcmp(line, "</SENSOR>") == 0)
                             {
-                                *maxVal = atof(line); // Set the minimum value
+                                // Got everything so let's leave
+                                return true;
                             }
-                            else
-                                return false; // Oops!
-                        }
-                        else if(strcmp(line, "</SENSOR>") == 0)
-                        {
-                            m_iNextSensor++; // Increment for next sensor
-                            return true; // Got it
-                        }
-                    } // end while
-                } // end if(sNum == m_iNextSensor)
-                else
-                {
-                    sNum++; // Check the next one
-                }
-            }
-        }
+                        } // end while
+                    }// end if get info
+                    else // Skip this sensor
+                    {
+                        while(strcmp(line, "</SENSOR>") != 0)
+                            getNextLine(line, 127);
+                    }
+                }// end if this is the one we are looking for
+            } // end if this is a <SENSOR> tag
+        } // end while reading lines
         inFile->close();
     } // end if file open
-    return false; // If we get here we have got all the sensors
+    return false; // If we get here we have got all the sensors of that type
 }
 
 //------------------------------------------------------------------
