@@ -1,5 +1,5 @@
 //====================================================================
-// sensor.cpp
+// display.cpp
 // Programming Assignment 1 : Sensor Simulation
 // Author: Samuel Sikes
 // Date: June 2016
@@ -15,38 +15,35 @@
 
 //---------------------------------
 //function: display()
-//Dynamically creates displayNode vector
-//and sets vPtr to dynamically
-//created vector.
+//Sets private display node ptr
+//to NULL
 //---------------------------------
 display::display(){
-    vPtr = new std::vector<displayNode*>;
+    this->displayNodePtr = NULL;
 };
 
 //---------------------------------
 //function: ~display()
-//Deletes dynamic vector and nodes,
-//sets private pointer to null,
-//sets vSensorNodePtrs to null.
+//Sets sensor node ptrs to null,
+//deletes private display node ptr,
+//sets private display node ptr to NULL.
 //---------------------------------
 display::~display(){
-    for(unsigned long i=0; i < vPtr->size(); i++) {
-        for(unsigned long j=0; j < vPtr->at(i)->vSensorNodePtrs.size(); j++)
-            vPtr->at(i)->vSensorNodePtrs.at(j) = NULL;
-        delete vPtr->at(i);
-        vPtr->at(i) = NULL;
-    }
-    delete vPtr;
-    vPtr = NULL;
+
+    for(unsigned long i = 0; i < this->displayNodePtr->vSensorNodePtrs.size(); i++)
+        this->displayNodePtr->vSensorNodePtrs.at(i) = NULL;
+
+    delete this->displayNodePtr;
+    this->displayNodePtr = NULL;
 };
 
 //---------------------------------
-//function: getDisplay()
-//Fills dynamically created displayNode
-//vector with displayNode ptrs.
+//function: setDisplay()
+//Sets private member displayNodePtr
+//to displayNode
 //---------------------------------
-void display::getDisplay(displayNode* dnPtr){
-    vPtr->push_back(dnPtr);
+void display::setDisplay(displayNode* dnPtr){
+    this->displayNodePtr = dnPtr;
 };
 
 //---------------------------------
@@ -55,31 +52,29 @@ void display::getDisplay(displayNode* dnPtr){
 //their associated sensor(s).
 //---------------------------------
 void display::displayData(){
-    for(unsigned long i=0; i < vPtr->size(); i++){
-        std::cout << "Display Device: " << vPtr->at(i)->type
-        << "\n";
-        for(unsigned long j=0; j < vPtr->at(i)->vSensorNodePtrs.size(); j++) {
-            std::cout << std::setw(15) << "Sensor " <<
-            vPtr->at(i)->vSensorNodePtrs.at(j)->ID << "\n"
-            << std::setw(23) <<"Type = " <<
-            vPtr->at(i)->vSensorNodePtrs.at(j)->type << "  " <<
-            "Material = " <<
-            vPtr->at(i)->vSensorNodePtrs.at(j)->material << "\n"
-            << std::setw(34) << "Current Reading = " <<
-            vPtr->at(i)->vSensorNodePtrs.at(j)->sensorData << " " <<
-            vPtr->at(i)->vSensorNodePtrs.at(j)->units << "\n\n";
-        }
+
+    std::cout << "Display Device: " << this->displayNodePtr->type
+    << "\n";
+
+    for(unsigned long i = 0; i < this->displayNodePtr->vSensorNodePtrs.size(); i++) {
+        std::cout << std::setw(15) << "Sensor " <<
+                this->displayNodePtr->vSensorNodePtrs.at(i)->ID << "\n"
+        << std::setw(23) <<"Type = " <<
+                this->displayNodePtr->vSensorNodePtrs.at(i)->type << "  " <<
+        "Material = " <<
+                this->displayNodePtr->vSensorNodePtrs.at(i)->material << "\n"
+        << std::setw(34) << "Current Reading = " <<
+                this->displayNodePtr->vSensorNodePtrs.at(i)->sensorData << " " <<
+                this->displayNodePtr->vSensorNodePtrs.at(i)->units << "\n\n";
     }
 };
 
 //---------------------------------
 //function: relayDisplayData()
-//Returns the private pointer vPtr,
-//which is pointing to a vector
-//container containing ptrs to
-//display nodes.
+//Returns the private pointer to
+//display node struct
 //---------------------------------
-std::vector<displayNode*>* display::relayDisplayData(){
-    return vPtr;
+displayNode* display::relayDisplayData(){
+    return this->displayNodePtr;
 };
 

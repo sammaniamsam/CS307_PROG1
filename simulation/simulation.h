@@ -9,7 +9,6 @@
 #include <unistd.h>
 //---------------------------------
 #include "../sensor/sensor.h"
-#include "../display/display.h"
 #include "../simpleDisplayFactory/simpleDisplayFactory.h"
 #include "../sensor_mount/sensorMount.h"
 #include "../data_parser/EnviroSimDataParser.h"
@@ -22,7 +21,6 @@ class simulation {
 
 private:
     sensor* sensorPtr;  //ptr to sensor class
-    display* displayPtr;    //ptr to display class
     sensorMount* sensorMountPtr;    //ptr to sensor mount class
     EnviroSimDataParser* dataParserPtr; //ptr to data parser class
 

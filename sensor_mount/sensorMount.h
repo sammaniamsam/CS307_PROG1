@@ -19,7 +19,7 @@
 class sensorMount {
 
 private:
-    std::vector<displayNode*> *vDisplayPtr; //ptr to vector of displayNode ptrs
+    std::vector<display*> *vDisplayPtr; //ptr to vector of display ptrs
     std::vector<sensorNode*> *vSensorPtr;   //ptr to vector of sensorNode ptrs
 
     void displayConnectedDisplays(unsigned long& numDisplays);
@@ -29,7 +29,7 @@ public:
     sensorMount();
     ~sensorMount();
     void attachSensors(std::vector<sensorNode*>* vSensors);
-    void attachDisplays(std::vector<displayNode*>* vDisplays);
+    void attachDisplay(display* displayPtr);
     void displayConnectedDevices();
     bool linkSensorsToDisplays();
 };

@@ -27,13 +27,14 @@ struct displayNode {
 class display {
 
 private:
-    std::vector<displayNode*> *vPtr; //ptr to vector of displayNode ptrs
+    displayNode* displayNodePtr; //ptr to displayNode
+
 public:
     display();
     ~display();
-    void getDisplay(displayNode* dnPtr);
+    void setDisplay(displayNode* dnPtr);
     void displayData();
-    std::vector<displayNode*>* relayDisplayData();
+    displayNode* relayDisplayData();
 };
 
 #endif

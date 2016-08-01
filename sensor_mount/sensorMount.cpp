@@ -19,12 +19,22 @@
 //connected to sensor mount
 //---------------------------------
 void sensorMount::displayConnectedDisplays(unsigned long& numDisplays) {
+
+    displayNode* dnPtr;
+
     for(unsigned long i = 0; i < numDisplays; i++) {
-        std::cout << "\n" << std::setw(15) << "Type = " <<
-        vDisplayPtr->at(i)->type;
-        for (int j = 0; j < vDisplayPtr->at(i)->IDCount; j++) {
+
+        //set dnPtr
+        dnPtr = vDisplayPtr->at(i)->relayDisplayData();
+
+        //print connected display type
+        std::cout << "\n" << std::setw(15) << "Type = " << dnPtr->type;
+
+        for (int j = 0; j < dnPtr->IDCount; j++) {
+
+            //print ID of sensor stored in display
             std::cout << "\n" << std::setw(23) << "Sensor " << j << " ID = " <<
-            vDisplayPtr->at(i)->IDs[j];
+                    dnPtr->IDs[j];
         }
     }
 };
@@ -57,21 +67,33 @@ void sensorMount::displayConnectedSensors(unsigned long& numSensors) {
 
 //---------------------------------
 //function: sensorMount()
-//Sets private member pointers to
-//NULL
+//Creates dynamic display and sensor
+//vectors
 //---------------------------------
 sensorMount::sensorMount() {
-    vDisplayPtr = NULL;
+    this->vDisplayPtr = new std::vector<display*>;
     vSensorPtr = NULL;
 };
 
 //---------------------------------
 //function: ~sensorMount()
-//Sets private member pointers to
-//NULL
+//Deallocates memory for each
+//dynamic class instance stored in
+//sensor mount's private display and
+//sensor vectors. Then, sets private
+//member pointers to NULL
 //---------------------------------
 sensorMount::~sensorMount() {
+
+    for(std::vector<display *>::iterator it = this->vDisplayPtr->begin();
+        it != this->vDisplayPtr->end(); it++) {
+
+        delete it;
+        it = NULL;
+    }
     vDisplayPtr = NULL;
+
+
     vSensorPtr = NULL;
 };
 
@@ -85,10 +107,11 @@ void sensorMount::attachSensors(std::vector<sensorNode *> *vSensors) {
 
 //---------------------------------
 //function: attachDisplays()
-//attaches displays to sensor mount
+//Add display to sensor mount's
+//private display vector
 //---------------------------------
-void sensorMount::attachDisplays(std::vector<displayNode *> *vDisplays) {
-    vDisplayPtr = vDisplays;
+void sensorMount::attachDisplay(display* displayPtr) {
+    this->vDisplayPtr->push_back(displayPtr);
 };
 
 //---------------------------------

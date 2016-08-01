@@ -68,6 +68,8 @@ void simulation::buildDevices(){
     this->createDisplays(displayCount);
     this->createSensors(sensorCount);
 
+    //new data parser is a singleton. May want to remove
+    //below line
     delete dataParserPtr; dataParserPtr = NULL;
 };
 
@@ -75,11 +77,11 @@ void simulation::buildDevices(){
 //function: createDisplays()
 //Creates the appropriate number of
 //displays and passes each display
-//to display's getDisplay() method
+//to display's setDisplay() method
 //---------------------------------
 void simulation::createDisplays(int& count){
 
-    //create singleton
+    //create singleton of simple display factory
     simpleDisplayFactory* SDFptr = simpleDisplayFactory::getInstance();
 
     for(int i=0; i < count; i++){
@@ -91,9 +93,10 @@ void simulation::createDisplays(int& count){
         if(!dataParserPtr->getDisplayData(displayNodePtr->type,displayNodePtr->IDs,&displayNodePtr->IDCount))
             cout << "\n" << "Parsing for Display " << i << " failed" << "\n";
         else {
-            displayPtr->getDisplay(displayNodePtr);
             //link display node to display class
+            displayPtr->setDisplay(displayNodePtr);
             //link display class to sensor mount
+            this->sensorMountPtr->attachDisplay(displayPtr);
         }
     }
 };
@@ -126,7 +129,7 @@ void simulation::createSensors(int& count){
 //---------------------------------
 void simulation::attachDevices(){
 
-    sensorMountPtr->attachDisplays(displayPtr->relayDisplayData());
+    //sensorMountPtr->attachDisplay(displayPtr);
     sensorMountPtr->attachSensors(sensorPtr->relaySensorData());
     if(!sensorMountPtr->linkSensorsToDisplays())
         std::cout << "\n" << "Linking Sensors To Displays FAILED" << "\n";
@@ -146,7 +149,6 @@ void simulation::attachDevices(){
 simulation::simulation(){
 
     sensorPtr = new sensor;
-    displayPtr = new display;
     sensorMountPtr = new sensorMount;
 };
 
@@ -159,7 +161,6 @@ simulation::simulation(){
 simulation::~simulation(){
 
     delete sensorPtr; sensorPtr = NULL;
-    delete displayPtr; displayPtr = NULL;
     delete sensorMountPtr; sensorMountPtr = NULL;
 };
 
@@ -194,6 +195,10 @@ void simulation::runSimulation() {
         std::cout << "\n\n";
         /*- - - - - - - - - - - - -*/
         sensorPtr->updateSensors();
+
+        //need iterative solution to display
+        //data for each display class
+        //may want to add private display vector
         displayPtr->displayData();
         /*- - - - - - - - - - - - -*/
         std::cout << "\n\n\n";
