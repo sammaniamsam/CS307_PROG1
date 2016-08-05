@@ -1,5 +1,5 @@
 //====================================================================
-// airSensorFactory.h
+// waterSensorFactory.h
 // Programming Assignment 1 : Sensor Simulation
 // Author: Samuel Sikes
 // Date: June 2016
@@ -7,27 +7,27 @@
 //====================================================================
 #include <iostream>
 //---------------------------------
-#include "../abstractSensorFactory/abstractSensorFactory.h"
-#include "../sensorType/sensorType.h"
-#include "../airSensor/airSensor.h"
+#include "../../abstractSensorFactory/abstractSensorFactory.h"
+#include "../../sensorType/sensorType.h"
+#include "../../products/waterSensor/waterSensor.h"
 //---------------------------------
 
-#ifndef CS307_PROG1_AIRSENSORFACTORY_H
-#define CS307_PROG1_AIRSENSORFACTORY_H
+#ifndef CS307_PROG1_WATERSENSORFACTORY_H
+#define CS307_PROG1_WATERSENSORFACTORY_H
 
 
-class airSensorFactory: public abstractSensorFactory {
+class waterSensorFactory: public abstractSensorFactory {
 
     private:
         int instanceNumber = 0; //number of instances created
-        airSensorFactory();
+        waterSensorFactory();
 
     public:
-        ~airSensorFactory();
+        ~waterSensorFactory();
         int getInstanceNumber();
-        static airSensorFactory* getInstance();
+        static waterSensorFactory* getInstance();
         sensorType* createSensorInstance();     /* virtual */
 };
 
 
-#endif //CS307_PROG1_AIRSENSORFACTORY_H
+#endif //CS307_PROG1_WATERSENSORFACTORY_H

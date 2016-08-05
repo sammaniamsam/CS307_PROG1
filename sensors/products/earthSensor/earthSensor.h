@@ -7,8 +7,8 @@
 //====================================================================
 #include <iostream>
 //---------------------------------
-#include "../sensorNode.h"
-#include "../sensorType/sensorType.h"
+#include "../../sensorNode.h"
+#include "../../sensorType/sensorType.h"
 //---------------------------------
 
 #ifndef CS307_PROG1_EARTHSENSOR_H

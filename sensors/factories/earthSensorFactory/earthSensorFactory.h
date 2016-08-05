@@ -7,9 +7,9 @@
 //====================================================================
 #include <iostream>
 //---------------------------------
-#include "../abstractSensorFactory/abstractSensorFactory.h"
-#include "../sensorType/sensorType.h"
-#include "../earthSensor/earthSensor.h"
+#include "../../abstractSensorFactory/abstractSensorFactory.h"
+#include "../../sensorType/sensorType.h"
+#include "../../products/earthSensor/earthSensor.h"
 //---------------------------------
 
 #ifndef CS307_PROG1_EARTHSENSORFACTORY_H
