@@ -6,7 +6,7 @@
 // This program is entirely my own work
 //====================================================================
 #include <iostream>
-#include "../sensorType.h"
+#include "../sensorType/sensorType.h"
 //---------------------------------
 
 #ifndef CS307_PROG1_ABSTRACTSENSORFACTORY_H

@@ -59,7 +59,6 @@ airSensorFactory* airSensorFactory::getInstance() {
 ///---------------------------------
 //function: createAirSensorInstance()
 //Returns dynamic instance of air sensor
-//**Note** FUNCTION IS VIRTUAL
 //---------------------------------
 sensorType* airSensorFactory::createSensorInstance() {
     return new airSensor();

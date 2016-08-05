@@ -6,6 +6,7 @@
 // This program is entirely my own work
 //====================================================================
 #include <iostream>
+#include "../sensorNode.h"
 //---------------------------------
 
 #ifndef CS307_PROG1_SENSORTYPE_H
@@ -16,8 +17,8 @@ class sensorType {
 public:
     sensorType();
     ~sensorType();
-    virtual void setSensor();
-    virtual void relaySensorData();
+    virtual void setSensor(sensorNode* snPtr);
+    virtual sensorNode* relaySensorData();
     virtual void updateSensor();
 };
 

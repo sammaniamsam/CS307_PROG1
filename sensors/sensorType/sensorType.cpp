@@ -10,7 +10,7 @@
 
 //---------------------------------
 //---------------------------------
-//--------PUBLIC METHODS----------
+//--------PUBLIC METHODS-----------
 //---------------------------------
 //---------------------------------
 
@@ -28,13 +28,15 @@ sensorType::~sensorType() { }
 //Set sensor data. Virtual function
 //that all subclasses must implement
 //---------------------------------
-void sensorType::setSensor() { }
+void sensorType::setSensor(sensorNode* snPtr) { }
 
 //---------------------------------
 //Relay sensor data. Virtual function
 //that all subclasses must implement
 //---------------------------------
-void sensorType::relaySensorData() { }
+sensorNode* sensorType::relaySensorData() {
+    return NULL;
+}
 
 //---------------------------------
 //Update sensor. Virtual function that

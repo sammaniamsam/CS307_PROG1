@@ -1,31 +1,33 @@
 //====================================================================
-// sensorType.h
+// simpleDisplayFactory.h
 // Programming Assignment 1 : Sensor Simulation
 // Author: Samuel Sikes
 // Date: June 2016
 // This program is entirely my own work
 //====================================================================
 #include <iostream>
-#include "../abstractSensorFactory/abstractSensorFactory.h"
-#include "../sensorType/sensorType.h"
+//---------------------------------
+#include "../../display/display.h"
 //---------------------------------
 
-#ifndef CS307_PROG1_AIRSENSORFACTORY_H
-#define CS307_PROG1_AIRSENSORFACTORY_H
+#ifndef CS307_PROG1_SIMPLEDISPLAYFACTORY_H
+#define CS307_PROG1_SIMPLEDISPLAYFACTORY_H
 
 
-class airSensorFactory: public abstractSensorFactory {
+class simpleDisplayFactory {
 
     private:
         int instanceNumber = 0; //number of instances created
-        airSensorFactory();
+        simpleDisplayFactory();
 
     public:
-        ~airSensorFactory();
+        ~simpleDisplayFactory();
         int getInstanceNumber();
-        static airSensorFactory* getInstance();
-        sensorType* createSensorInstance();
+        static simpleDisplayFactory *getInstance();
+        display *createDisplayInstance();
+
+
 };
 
 
-#endif //CS307_PROG1_AIRSENSORFACTORY_H
+#endif //CS307_PROG1_SIMPLEDISPLAYFACTORY_H
