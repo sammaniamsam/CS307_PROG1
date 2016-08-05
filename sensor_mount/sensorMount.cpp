@@ -145,6 +145,7 @@ void sensorMount::displayConnectedDevices() {
 //was unsuccessful
 //---------------------------------
 bool sensorMount::linkSensorsToDisplays() {
+
     unsigned long links = 0;
 
     /*for(unsigned long i=0; i < vSensorPtr->size(); i++){
