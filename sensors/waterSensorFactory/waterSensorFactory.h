@@ -9,7 +9,7 @@
 //---------------------------------
 #include "../abstractSensorFactory/abstractSensorFactory.h"
 #include "../sensorType/sensorType.h"
-#include //water sensor
+#include "../waterSensor/waterSensor.h"
 //---------------------------------
 
 #ifndef CS307_PROG1_WATERSENSORFACTORY_H
