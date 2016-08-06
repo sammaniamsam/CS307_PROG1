@@ -9,7 +9,8 @@
 #include <iomanip>
 #include <vector>
 //---------------------------------
-#include "../display/display.h"
+#include "../displays/display/display.h"
+#include "../sensors/sensorType/sensorType.h"
 #include "../sensor/sensor.h"
 //---------------------------------
 
@@ -19,8 +20,8 @@
 class sensorMount {
 
 private:
-    std::vector<display*> *vDisplayPtr; //ptr to vector of display ptrs
-    std::vector<sensorNode*> *vSensorPtr;   //ptr to vector of sensorNode ptrs
+    std::vector<display*> *vDisplayPtr;     //ptr to vector of display class ptrs
+    std::vector<sensorType*> *vSensorPtr;   //ptr to vector of sensor class ptrs
 
     void displayConnectedDisplays(unsigned long& numDisplays);
     void displayConnectedSensors(unsigned long& numSensors);
@@ -28,7 +29,7 @@ private:
 public:
     sensorMount();
     ~sensorMount();
-    void attachSensors(std::vector<sensorNode*>* vSensors);
+    void attachSensors(sensorType* sensorPtr);
     void attachDisplay(display* displayPtr);
     void displayConnectedDevices();
     bool linkSensorsToDisplays();

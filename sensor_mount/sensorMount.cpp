@@ -45,17 +45,23 @@ void sensorMount::displayConnectedDisplays(unsigned long& numDisplays) {
 //connected to sensor mount
 //---------------------------------
 void sensorMount::displayConnectedSensors(unsigned long& numSensors) {
+
+    sensorNode* snPtr;
+
     for(unsigned long i = 0; i < numSensors; i++){
+
+        //set snPtr
+        snPtr = this->vSensorPtr->at(i)->relaySensorData();
+
+        //print sensor properties
         std::cout << "\n" << std::setw(15) << "Type = " <<
-        this->vSensorPtr->at(i)->type << std::setw(8) << "ID = " <<
-        this->vSensorPtr->at(i)->ID;
+        snPtr->type << std::setw(8) << "ID = " << snPtr->ID;
         std::cout << "\n" << std::setw(28) << "Material = " <<
-        this->vSensorPtr->at(i)->material << std::setw(10) <<
-        "Units = " << vSensorPtr->at(i)->units;
+        snPtr->material << std::setw(10) <<
+        "Units = " << snPtr->units;
         std::cout << "\n" << std::setw(23) << "Min = " <<
-        this->vSensorPtr->at(i)->minVal << std::setw(8) << "Max = " <<
-        this->vSensorPtr->at(i)->maxVal << std::setw(8) << "Cur = " <<
-        this->vSensorPtr->at(i)->sensorData;
+        snPtr->minVal << std::setw(8) << "Max = " <<
+        snPtr->maxVal << std::setw(8) << "Cur = " << snPtr->sensorData;
     }
 };
 
@@ -101,8 +107,8 @@ sensorMount::~sensorMount() {
 //function: attachSensors()
 //attaches sensors to sensor mount
 //---------------------------------
-void sensorMount::attachSensors(std::vector<sensorNode *> *vSensors) {
-    this->vSensorPtr = vSensors;
+void sensorMount::attachSensors(sensorType* sensorPtr) {
+    this->vSensorPtr->push_back(sensorPtr);
 };
 
 //---------------------------------

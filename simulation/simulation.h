@@ -8,10 +8,30 @@
 #include <iostream>
 #include <unistd.h>
 //---------------------------------
-#include "../sensor/sensor.h"
-#include "../simpleDisplayFactory/simpleDisplayFactory.h"
+//sensors directory
+//---------------------------------
+#include "../sensors/sensor/sensor.h"
+#include "../sensors/abstractSensorFactory/abstractSensorFactory.h"
+#include "../sensors/factories/airSensorFactoy/airSensorFactory.h"
+#include "../sensors/factories/waterSensorFactory/waterSensorFactory.h"
+#include "../sensors/factories/earthSensorFactory/earthSensorFactory.h"
+#include "../sensors/sensorType/sensorType.h"
+#include "../sensors/products/airSensor/airSensor.h"
+#include "../sensors/products/waterSensor/waterSensor.h"
+#include "../sensors/products/earthSensor/earthSensor.h"
+#include "../sensors/sensorNode.h"
+//---------------------------------
+//displays directory
+//---------------------------------
+#include "../displays/simpleDisplayFactory/simpleDisplayFactory.h"
+#include "../displays/display/display.h"
+//---------------------------------
+//sensor_mount directory
+//---------------------------------
 #include "../sensor_mount/sensorMount.h"
 #include "../data_parser/EnviroSimDataParser.h"
+//---------------------------------
+//data_parser directory
 //---------------------------------
 
 #ifndef SIMULATION_H
@@ -20,12 +40,17 @@
 class simulation {
 
 private:
+    abstractSensorFactory* ASFptr; //ptr to air, water and earth sensor factory classes
+    sensorType* sensorTypePtr; //ptr to sensor Type class
+    simpleDisplayFactory* SDFptr; //ptr to simple display factory class
     sensor* sensorPtr;  //ptr to sensor class
     sensorMount* sensorMountPtr;    //ptr to sensor mount class
     EnviroSimDataParser* dataParserPtr; //ptr to data parser class
 
-    void createDisplays(int& count);
-    void createSensors(int& count);
+    void createDisplays();
+    void createAirSensors(int& airCtr);
+    void createWaterSensors(int& waterCtr);
+    void createEarthSensors(int& earthCtr);
     void getFile();
     void buildDevices();
     void attachDevices();
