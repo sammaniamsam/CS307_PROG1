@@ -45,6 +45,7 @@ private:
     sensorMount* sensorMountPtr;    //ptr to sensor mount class
     EnviroSimDataParser* dataParserPtr; //ptr to data parser class
     std::vector<sensorType* >* vSensors; //ptr to vector of sensor ptrs
+    std::vector<display* >* vDisplays; //ptr to vector of display ptrs
 
     void createDisplays();
     void createAirSensors(int& airCtr);
@@ -54,6 +55,8 @@ private:
     void buildDevices();
     void updateSensors();
     void simulationDescription1();
+    void simulationDescription2();
+    void simulationDescription3();
 
 public:
     simulation();

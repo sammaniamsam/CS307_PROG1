@@ -35,6 +35,24 @@ void simulation::simulationDescription1(){
     std::cout << "\n\n";
 };
 
+void simulation::simulationDescription2(){
+
+    std::cout << "\n\n\n" << "Beginning simulation run..." << "\n\n";
+    for (int i = 0; i < 20; i++)
+        std::cout << "=";
+    std::cout << " Running simulation ";
+    for (int i = 0; i < 20; i++)
+        std::cout << "=";
+    std::cout << "\n\n" << "Press Ctrl-c to terminate the simulation" << "\n\n";
+}
+
+void simulation::simulationDescription3() {
+
+    for (int i = 0; i < 60; i++)
+        std::cout << "=";
+    std::cout << "\n\n";
+}
+
 //---------------------------------
 //function: getFile()
 //Prompts user to enter the name
@@ -105,6 +123,7 @@ void simulation::createDisplays(){
 
             //link display node to display class
             displayPtr->setDisplay(displayNodePtr);
+            this->vDisplays->push_back(displayPtr);
 
             //link display class to sensor mount
             this->sensorMountPtr->attachDisplay(displayPtr);
@@ -254,6 +273,7 @@ simulation::simulation(){
     this->SDFptr = simpleDisplayFactory::getInstance();
 
     this->vSensors = new std::vector<sensorType* >;
+    this->vDisplays = new std::vector<display* >;
     sensorMountPtr = new sensorMount;
 };
 
@@ -265,6 +285,7 @@ simulation::simulation(){
 //---------------------------------
 simulation::~simulation(){
 
+    delete this->vDisplays;
     delete this->vSensors;
     delete sensorMountPtr; sensorMountPtr = NULL;
 };
@@ -282,30 +303,21 @@ void simulation::runSimulation() {
     this->getFile();
     this->buildDevices();
     this->sensorMountPtr->displayConnectedDevices();
-    /*- - - - - - - - - - - - -*/
-    std::cout << "\n\n\n" << "Beginning simulation run..." << "\n\n";
-    for (int i = 0; i < 20; i++)
-        std::cout << "=";
-    std::cout << " Running simulation ";
-    for (int i = 0; i < 20; i++)
-        std::cout << "=";
-    std::cout << "\n\n" << "Press Ctrl-c to terminate the simulation" << "\n\n";
-    /*- - - - - - - - - - - - -*/
+
+    this->simulationDescription2();
+
     while(true){
         usleep(5000000);
-        /*- - - - - - - - - - - - -*/
-        for (int i = 0; i < 60; i++)
-            std::cout << "=";
-        std::cout << "\n\n";
-        /*- - - - - - - - - - - - -*/
+
+        this->simulationDescription3();
+
         this->updateSensors();
 
-        //need iterative solution to display
-        //data for each display class
-        //may want to add private display vector
-        //displayPtr->displayData();
-        /*- - - - - - - - - - - - -*/
+        for(unsigned long i = 0; i < this->vDisplays->size(); i++)
+            this->vDisplays->at(i)->displayData();
+            //UPDATE OBSERVERS STATEMENT NEEDED HERE
+
         std::cout << "\n\n\n";
-        /*- - - - - - - - - - - - -*/
+
     }
 };
