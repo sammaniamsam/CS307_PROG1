@@ -5,6 +5,9 @@
 // Date: June 2016
 // This program is entirely my own work
 //====================================================================
+#ifndef SIMULATION_H
+#define SIMULATION_H
+//---------------------------------
 #include <iostream>
 #include <unistd.h>
 //---------------------------------
@@ -28,41 +31,39 @@
 //sensor_mount directory
 //---------------------------------
 #include "../sensor_mount/sensorMount.h"
-#include "../data_parser/EnviroSimDataParser.h"
 //---------------------------------
 //data_parser directory
 //---------------------------------
-
-#ifndef SIMULATION_H
-#define SIMULATION_H
+#include "../data_parser/EnviroSimDataParser.h"
+//---------------------------------
 
 class simulation {
 
-private:
-    abstractSensorFactory* ASFptr; //ptr to air, water and earth sensor factory classes
-    sensorType* sensorTypePtr; //ptr to sensor Type class
-    simpleDisplayFactory* SDFptr; //ptr to simple display factory class
-    sensorMount* sensorMountPtr;    //ptr to sensor mount class
-    EnviroSimDataParser* dataParserPtr; //ptr to data parser class
-    std::vector<sensorType* >* vSensors; //ptr to vector of sensor ptrs
-    std::vector<display* >* vDisplays; //ptr to vector of display ptrs
+    private:
+        abstractSensorFactory* ASFptr; //ptr to air, water and earth sensor factory classes
+        sensorType* sensorTypePtr; //ptr to sensor Type class
+        simpleDisplayFactory* SDFptr; //ptr to simple display factory class
+        sensorMount* sensorMountPtr;    //ptr to sensor mount class
+        EnviroSimDataParser* dataParserPtr; //ptr to data parser class
+        std::vector<sensorType* >* vSensors; //ptr to vector of sensor ptrs
+        std::vector<display* >* vDisplays; //ptr to vector of display ptrs
 
-    void createDisplays();
-    void createAirSensors(int& airCtr);
-    void createWaterSensors(int& waterCtr);
-    void createEarthSensors(int& earthCtr);
-    void getFile();
-    void buildDevices();
-    void updateSensors();
-    void simulationDescription1();
-    void simulationDescription2();
-    void simulationDescription3();
+        void createDisplays();
+        void createAirSensors(int& airCtr);
+        void createWaterSensors(int& waterCtr);
+        void createEarthSensors(int& earthCtr);
+        void getFile();
+        void buildDevices();
+        void updateSensors();
+        void simulationDescription1();
+        void simulationDescription2();
+        void simulationDescription3();
 
-public:
-    simulation();
-    ~simulation();
-    void runSimulation();
+    public:
+        simulation();
+        ~simulation();
+        void runSimulation();
 
 };
 
-#endif
+#endif //SIMULATION_H

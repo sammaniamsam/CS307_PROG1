@@ -5,14 +5,13 @@
 // Date: June 2016
 // This program is entirely my own work
 //====================================================================
+#ifndef CS307_PROG1_SIMPLEDISPLAYFACTORY_H
+#define CS307_PROG1_SIMPLEDISPLAYFACTORY_H
+//---------------------------------
 #include <iostream>
 //---------------------------------
 #include "../display/display.h"
 //---------------------------------
-
-#ifndef CS307_PROG1_SIMPLEDISPLAYFACTORY_H
-#define CS307_PROG1_SIMPLEDISPLAYFACTORY_H
-
 
 class simpleDisplayFactory {
 
@@ -28,6 +27,5 @@ class simpleDisplayFactory {
 
 
 };
-
 
 #endif //CS307_PROG1_SIMPLEDISPLAYFACTORY_H

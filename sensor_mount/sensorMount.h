@@ -5,6 +5,9 @@
 // Date: June 2016
 // This program is entirely my own work
 //====================================================================
+#ifndef SENSORMOUNT_H
+#define SENSORMOUNT_H
+//---------------------------------
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -12,9 +15,6 @@
 #include "../displays/display/display.h"
 #include "../sensors/sensorType/sensorType.h"
 //---------------------------------
-
-#ifndef SENSORMOUNT_H
-#define SENSORMOUNT_H
 
 class sensorMount {
 

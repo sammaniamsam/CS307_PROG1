@@ -5,15 +5,17 @@
 // Date: June 2016
 // This program is entirely my own work
 //====================================================================
+#ifndef DISPLAY_H
+#define DISPLAY_H
+//---------------------------------
 #include <iostream>
 #include <iomanip>
 #include <vector>
 //---------------------------------
 #include "../../sensors/sensorNode.h"
+#include "../subject/subject.h"
+#include "../observer/observer.h"
 //---------------------------------
-
-#ifndef DISPLAY_H
-#define DISPLAY_H
 
 //---------------------------------
 struct displayNode {
@@ -23,11 +25,22 @@ struct displayNode {
     std::vector<sensorNode*> vSensorNodePtrs;
 };
 //---------------------------------
+struct sensorSubscription {
+    int ID;
+    bool status;
+};
+//---------------------------------
 
-class display {
+class display: public subject {
 
 private:
     displayNode* displayNodePtr; //ptr to displayNode
+    std::vector<observer* >* vObserversPtr; //ptr to vertor of observer ptrs
+    std::vector<sensorSubscription* > vSubscriptions;
+
+    void clearObservers();
+    void setSubscriptionVector();
+    void clearSubscriptionVector();
 
 public:
     display();
@@ -35,6 +48,11 @@ public:
     void setDisplay(displayNode* dnPtr);
     void displayData();
     displayNode* relayDisplayData();
+
+    void registerObserver(observer *obs);       /* virtual */
+    void notifyObservers();                     /* virtual */
+    bool setSubscriptionStatus(int& sensorID);
+    int relaySubscriptionCount();
 };
 
-#endif
+#endif //DISPLAY_H

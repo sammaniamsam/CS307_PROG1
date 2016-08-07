@@ -5,8 +5,7 @@
 // Date: June 2016
 // This program is entirely my own work
 //====================================================================
-
-#include "subjecct.h"
+#include "subject.h"
 
 //---------------------------------
 //---------------------------------
@@ -28,11 +27,6 @@ subject::~subject() { }
 // Add an observer
 //-------------------------------
 void subject::registerObserver(observer *obs) { }
-
-//-------------------------------
-// Remove an observer
-//-------------------------------
-bool subject::removeObserver(observer *obs) { }
 
 //-------------------------------
 // Notify all observers
