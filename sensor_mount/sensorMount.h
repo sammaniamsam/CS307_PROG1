@@ -11,7 +11,6 @@
 //---------------------------------
 #include "../displays/display/display.h"
 #include "../sensors/sensorType/sensorType.h"
-#include "../sensor/sensor.h"
 //---------------------------------
 
 #ifndef SENSORMOUNT_H
@@ -19,20 +18,20 @@
 
 class sensorMount {
 
-private:
-    std::vector<display*> *vDisplayPtr;     //ptr to vector of display class ptrs
-    std::vector<sensorType*> *vSensorPtr;   //ptr to vector of sensor class ptrs
+    private:
+        std::vector<display*> *vDisplayPtr;     //ptr to vector of display class ptrs
+        std::vector<sensorType*> *vSensorPtr;   //ptr to vector of sensor class ptrs
 
-    void displayConnectedDisplays(unsigned long& numDisplays);
-    void displayConnectedSensors(unsigned long& numSensors);
+        void displayConnectedDisplays(unsigned long& numDisplays);
+        void displayConnectedSensors(unsigned long& numSensors);
 
-public:
-    sensorMount();
-    ~sensorMount();
-    void attachSensors(sensorType* sensorPtr);
-    void attachDisplay(display* displayPtr);
-    void displayConnectedDevices();
-    bool linkSensorsToDisplays();
+    public:
+        sensorMount();
+        ~sensorMount();
+        void attachSensor(sensorType* sensorPtr);
+        void attachDisplay(display* displayPtr);
+        void displayConnectedDevices();
+        bool linkSensorsToDisplays();
 };
 
 #endif

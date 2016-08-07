@@ -53,7 +53,7 @@ void sensorMount::displayConnectedSensors(unsigned long& numSensors) {
         //set snPtr
         snPtr = this->vSensorPtr->at(i)->relaySensorData();
 
-        //print sensor properties
+        //print sensor node properties
         std::cout << "\n" << std::setw(15) << "Type = " <<
         snPtr->type << std::setw(8) << "ID = " << snPtr->ID;
         std::cout << "\n" << std::setw(28) << "Material = " <<
@@ -78,7 +78,7 @@ void sensorMount::displayConnectedSensors(unsigned long& numSensors) {
 //---------------------------------
 sensorMount::sensorMount() {
     this->vDisplayPtr = new std::vector<display*>;
-    this->vSensorPtr = NULL;
+    this->vSensorPtr = new std::vector<sensorType*>;
 };
 
 //---------------------------------
@@ -91,15 +91,20 @@ sensorMount::sensorMount() {
 //---------------------------------
 sensorMount::~sensorMount() {
 
-    for(std::vector<display *>::iterator it = this->vDisplayPtr->begin();
-        it != this->vDisplayPtr->end(); it++) {
+    //delete all dynamic display classes
+    for(unsigned long i = 0; i < this->vDisplayPtr->size(); i++) {
 
-        delete it;
-        it = NULL;
+        delete this->vDisplayPtr->at(i);
+        this->vDisplayPtr->at(i) = NULL;
     }
     this->vDisplayPtr = NULL;
 
+    //delete all dynamic sensor classes
+    for(unsigned long i = 0; i < this->vSensorPtr->size(); i++) {
 
+        delete this->vSensorPtr->at(i);
+        this->vSensorPtr->at(i) = NULL;
+    }
     this->vSensorPtr = NULL;
 };
 
@@ -107,7 +112,7 @@ sensorMount::~sensorMount() {
 //function: attachSensors()
 //attaches sensors to sensor mount
 //---------------------------------
-void sensorMount::attachSensors(sensorType* sensorPtr) {
+void sensorMount::attachSensor(sensorType* sensorPtr) {
     this->vSensorPtr->push_back(sensorPtr);
 };
 
@@ -153,23 +158,6 @@ void sensorMount::displayConnectedDevices() {
 bool sensorMount::linkSensorsToDisplays() {
 
     unsigned long links = 0;
-
-    /*for(unsigned long i=0; i < vSensorPtr->size(); i++){
-        for(unsigned long j=0; j < vDisplayPtr->size(); j++){
-            for(int k=0; k < vDisplayPtr->at(j)->IDCount; k++){
-                if(vSensorPtr->at(i)->ID == vDisplayPtr->at(j)->IDs[k]) {
-                    vDisplayPtr->at(j)->vSensorNodePtrs
-                    .push_back(vSensorPtr->at(i));
-                    ++links;
-                }
-            }
-        }
-    }*/
-
-    //------------------------------------
-    //re-configure sensor class to allow
-    //code below to work
-    //------------------------------------
 
     //for each sensor in vSensorPtr
     for(unsigned long i = 0; i < this->vSensorPtr->size(); i++){

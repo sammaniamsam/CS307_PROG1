@@ -7,7 +7,7 @@
 //====================================================================
 #include <iostream>
 //---------------------------------
-#include "../../display/display.h"
+#include "../display/display.h"
 //---------------------------------
 
 #ifndef CS307_PROG1_SIMPLEDISPLAYFACTORY_H

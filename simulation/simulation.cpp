@@ -14,11 +14,11 @@
 //---------------------------------
 
 //---------------------------------
-//function: simulationDescription()
+//function: simulationDescription1()
 //Displays a description of the
 //program.
 //---------------------------------
-void simulation::simulationDescription(){
+void simulation::simulationDescription1(){
 
     for (int i = 0; i < 60; i++)
         std::cout << "=";
@@ -73,6 +73,10 @@ void simulation::buildDevices(){
 
     //create displays
     this->createDisplays();
+
+    //link devices
+    if(!sensorMountPtr->linkSensorsToDisplays())
+        std::cout << "\n" << "Linking Sensors To Displays FAILED" << "\n";
 };
 
 //---------------------------------
@@ -136,10 +140,10 @@ void simulation::createAirSensors(int& airCtr) {
             //create air sensor
             this->sensorTypePtr = this->ASFptr->createSensorInstance();
             this->sensorTypePtr->setSensor(sensorNodePtr);
-            //---------------------------------
-            //pass sensor to sensorMount function
-            //that has an argument of sensorTypePtr
-            //---------------------------------
+            this->vSensors->push_back(this->sensorTypePtr);
+
+            //attach sensor to sensor mount
+            sensorMountPtr->attachSensor(this->sensorTypePtr);
         }
     }
 }
@@ -172,10 +176,10 @@ void simulation::createWaterSensors(int& waterCtr) {
             //create water sensor
             this->sensorTypePtr = this->ASFptr->createSensorInstance();
             this->sensorTypePtr->setSensor(sensorNodePtr);
-            //---------------------------------
-            //pass sensor to sensorMount function
-            //that has an argument of sensorTypePtr
-            //---------------------------------
+            this->vSensors->push_back(this->sensorTypePtr);
+
+            //attach sensor to sensor mount
+            sensorMountPtr->attachSensor(this->sensorTypePtr);
         }
     }
 }
@@ -208,29 +212,22 @@ void simulation::createEarthSensors(int& earthCtr) {
             //create earth sensor
             this->sensorTypePtr = this->ASFptr->createSensorInstance();
             this->sensorTypePtr->setSensor(sensorNodePtr);
-            //---------------------------------
-            //pass sensor to sensorMount function
-            //that has an argument of sensorTypePtr
-            //---------------------------------
+            this->vSensors->push_back(this->sensorTypePtr);
+
+            //attach sensor to sensor mount
+            sensorMountPtr->attachSensor(this->sensorTypePtr);
         }
     }
 }
 
 //---------------------------------
-//function: attachDevices()
-//Attaches all sensors and display
-//devices to sensor mount. Then,
-//calls sensor mount funciton to
-//link all sensors to the appropriate
-//display devices.
+//function: updateSensors()
 //---------------------------------
-void simulation::attachDevices(){
+void simulation::updateSensors() {
 
-    //sensorMountPtr->attachDisplay(displayPtr);
-    sensorMountPtr->attachSensors(sensorPtr->relaySensorData());
-    if(!sensorMountPtr->linkSensorsToDisplays())
-        std::cout << "\n" << "Linking Sensors To Displays FAILED" << "\n";
-};
+    for(unsigned long i = 0; i < this->vSensors->size(); i++)
+        vSensors->at(i)->updateSensor();
+}
 
 //---------------------------------
 //---------------------------------
@@ -256,7 +253,7 @@ simulation::simulation(){
     //create singleton of simple display factory
     this->SDFptr = simpleDisplayFactory::getInstance();
 
-    sensorPtr = new sensor;
+    this->vSensors = new std::vector<sensorType* >;
     sensorMountPtr = new sensorMount;
 };
 
@@ -268,7 +265,7 @@ simulation::simulation(){
 //---------------------------------
 simulation::~simulation(){
 
-    delete sensorPtr; sensorPtr = NULL;
+    delete this->vSensors;
     delete sensorMountPtr; sensorMountPtr = NULL;
 };
 
@@ -281,11 +278,10 @@ simulation::~simulation(){
 //---------------------------------
 void simulation::runSimulation() {
 
-    this->simulationDescription();
+    this->simulationDescription1();
     this->getFile();
     this->buildDevices();
-    this->attachDevices();
-    sensorMountPtr->displayConnectedDevices();
+    this->sensorMountPtr->displayConnectedDevices();
     /*- - - - - - - - - - - - -*/
     std::cout << "\n\n\n" << "Beginning simulation run..." << "\n\n";
     for (int i = 0; i < 20; i++)
@@ -302,12 +298,12 @@ void simulation::runSimulation() {
             std::cout << "=";
         std::cout << "\n\n";
         /*- - - - - - - - - - - - -*/
-        sensorPtr->updateSensors();
+        this->updateSensors();
 
         //need iterative solution to display
         //data for each display class
         //may want to add private display vector
-        displayPtr->displayData();
+        //displayPtr->displayData();
         /*- - - - - - - - - - - - -*/
         std::cout << "\n\n\n";
         /*- - - - - - - - - - - - -*/

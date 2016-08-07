@@ -10,7 +10,6 @@
 //---------------------------------
 //sensors directory
 //---------------------------------
-#include "../sensors/sensor/sensor.h"
 #include "../sensors/abstractSensorFactory/abstractSensorFactory.h"
 #include "../sensors/factories/airSensorFactoy/airSensorFactory.h"
 #include "../sensors/factories/waterSensorFactory/waterSensorFactory.h"
@@ -43,9 +42,9 @@ private:
     abstractSensorFactory* ASFptr; //ptr to air, water and earth sensor factory classes
     sensorType* sensorTypePtr; //ptr to sensor Type class
     simpleDisplayFactory* SDFptr; //ptr to simple display factory class
-    sensor* sensorPtr;  //ptr to sensor class
     sensorMount* sensorMountPtr;    //ptr to sensor mount class
     EnviroSimDataParser* dataParserPtr; //ptr to data parser class
+    std::vector<sensorType* >* vSensors; //ptr to vector of sensor ptrs
 
     void createDisplays();
     void createAirSensors(int& airCtr);
@@ -53,8 +52,8 @@ private:
     void createEarthSensors(int& earthCtr);
     void getFile();
     void buildDevices();
-    void attachDevices();
-    void simulationDescription();
+    void updateSensors();
+    void simulationDescription1();
 
 public:
     simulation();

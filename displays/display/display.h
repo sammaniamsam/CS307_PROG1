@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <vector>
 //---------------------------------
-#include "../../sensor/sensor.h"
+#include "../../sensors/sensorNode.h"
 //---------------------------------
 
 #ifndef DISPLAY_H
