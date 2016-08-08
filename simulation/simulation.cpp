@@ -44,6 +44,8 @@ void simulation::simulationDescription2(){
     for (int i = 0; i < 20; i++)
         std::cout << "=";
     std::cout << "\n\n" << "Press Ctrl-c to terminate the simulation" << "\n\n";
+    std::cout << "Press S to have display devices subscribe or unsubscribe to a" << "\n" <<
+    std::setw(20) << "sensor data feed." << "\n\n";
 }
 
 void simulation::simulationDescription3() {
@@ -313,8 +315,20 @@ void simulation::runSimulation() {
 
         this->updateSensors();
 
-        for(unsigned long i = 0; i < this->vDisplays->size(); i++)
-            this->vDisplays->at(i)->displayData();
+        for(unsigned long i = 0; i < this->vDisplays->size(); i++) {
+            //this->vDisplays->at(i)->displayData();
+            //this->vDisplays->at(i)->notifyObservers();
+
+            //Call display fctn to print sensor ID selection
+            std::cout << i+1 << ". Device " <<
+            this->vDisplays->at(i)->relayDisplayData()->type;
+            this->vDisplays->at(i)->displayMonitoredSensors();
+        }
+        //print sub / un-sub message
+        std::cout << "To subscribe/unsubscribe enter the device number (1-6)" << "\n" <<
+        std::setw(64) << "a space, then a sensor ID for that device, then press [Enter]";
+
+
             //UPDATE OBSERVERS STATEMENT NEEDED HERE
 
         std::cout << "\n\n\n";

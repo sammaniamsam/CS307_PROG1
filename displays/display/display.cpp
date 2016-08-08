@@ -124,6 +124,19 @@ void display::displayData(){
 }
 
 //---------------------------------
+//function: displayMonitoredSensors()
+//---------------------------------
+void display::displayMonitoredSensors() {
+
+    std::cout << "\n";
+    for(unsigned long i = 0; i < this->displayNodePtr->vSensorNodePtrs.size(); i++) {
+        std::cout << std::setw(10) << i+1 << ". Sensor " <<
+        this->displayNodePtr->vSensorNodePtrs.at(i)->ID <<
+        " - is monitoring" << "\n";
+    }
+}
+
+//---------------------------------
 //function: relayDisplayData()
 //Returns the private pointer to
 //display node struct

@@ -27,6 +27,9 @@
 //---------------------------------
 #include "../displays/simpleDisplayFactory/simpleDisplayFactory.h"
 #include "../displays/display/display.h"
+#include "../displays/observer/observer.h"
+#include "../displays/subject/subject.h"
+#include "../displays/subscriptionStatusObserver/subscriptionStatusObserver.h"
 //---------------------------------
 //sensor_mount directory
 //---------------------------------

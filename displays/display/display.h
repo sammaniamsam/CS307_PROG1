@@ -48,6 +48,7 @@ public:
     void setDisplay(displayNode* dnPtr);
     void displayData();
     displayNode* relayDisplayData();
+    void displayMonitoredSensors();
 
     void registerObserver(observer *obs);       /* virtual */
     void notifyObservers();                     /* virtual */
